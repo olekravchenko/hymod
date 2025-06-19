@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Модели и методы</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f0f4f8;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        td.narrow-column {
+            width: 20%;
+            font-weight: 500;
+            color: #4a5568;
+            background-color: #f8fafc;
+        }
+
+        td.wide-column {
+            width: 80%;
+        }
+
+        .section {
+            margin-bottom: 15px;
+        }
+
+        .section h3 {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .equation {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #3182ce;
+            background-color: #ebf8ff;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 8px 0;
+        }
+
+        .interpretation {
+            font-size: 0.95em;
+            color: #4a5568;
+            margin: 8px 0;
+        }
+
+        .example {
+            font-style: italic;
+            color: #718096;
+            margin: 8px 0;
+        }
+
+        .image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-button {
+            background-color: #ebf8ff;
+            color: #3182ce;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin: 5px 0;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .toggle-button:hover {
+            background-color: #bee3f8;
+        }
+
+        .toggle-button::before {
+            content: '+';
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .toggle-button.active::before {
+            content: '−';
+        }
+
+        .collapsed {
+            display: none;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            td.narrow-column {
+                width: 30%;
+            }
+
+            td.wide-column {
+                width: 70%;
+            }
+
+            .section h3 {
+                font-size: 1.1em;
+            }
+
+            .equation {
+                font-size: 1em;
+            }
+
+            .interpretation {
+                font-size: 0.9em;
+            }
+
+            .example {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            td.narrow-column {
+                width: 40%;
+            }
+
+            td.wide-column {
+                width: 60%;
+            }
+
+            .section h3 {
+                font-size: 1em;
+            }
+
+            .equation {
+                font-size: 0.9em;
+            }
+
+            .interpretation {
+                font-size: 0.85em;
+            }
+
+            .example {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Модели и методы</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Модель</th>
+                <th>Примеры из разных областей наук о жизни</th>
+                <th>Методы</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Строки будут добавлены динамически -->
+        </tbody>
+    </table>
+
+    <script>
+        // Данные о моделях
+        const modelsData = [];
+
+        // Добавление всех моделей из первой таблицы
+        modelsData.push({
+            type: "Разностные уравнения",
+            examples: [
+                {
+                    title: "Экология",
+                    equation: "\\[ l_{n+1,i} = \\frac{a p_{n,i}}{p_{\\text{loc}}} \\left(1 - \\frac{p_{n,i}}{p_{\\text{loc}}}\\right) \\]",
+                    interpretation: "Переменные: \\( l_{n+1,i} \\) — количество пропагул (личинок) в поколении \\( n+1 \\) на участке \\( i \\)...",
+                    source: "<a href='https://doi.org/10.1016/j.tpb.2018.04.003'>10.1016/j.tpb.2018.04.003</a>",
+                    image: "https://ars.els-cdn.com/content/image/1-s2.0-S0040580917301375-gr4_lrg.jpg"
+                },
+                {
+                    title: "Эпидемиология",
+                    equation: "$$ \\begin{cases} S_{t+1} = (1 - \\varepsilon_t) S_t, \\\\ E_{t+1} = \\varepsilon_t S_t + (1 - \\alpha) E_t, \\\\ A_{t+1} = \\alpha E_t + (1 - \\delta) A_t, \\\\ I_{t+1} = p \\delta A_t + (1 - \\gamma) I_t, \\\\ R_{t+1} = (1 - p) \\delta A_t + (1 - q) \\gamma I_t + R_t, \\\\ D_{t+1} = q \\gamma I_t + D_t, \\end{cases} $$",
+                    interpretation: "Переменные: \\( S_t \\) — доля восприимчивых к инфекции людей в момент времени \\( t \\)...",
+                    source: "<a href='https://doi.org/10.3390/math11051092'>10.3390/math11051092</a>",
+                    image: "https://www.mdpi.com/mathematics/mathematics-11-01092/article_deploy/html/images/mathematics-11-01092-g001.png"
+                }
+            ],
+            methods: [
+                "Численные методы: метод Эйлера, метод Рунге-Кутта",
+                "Аналитические методы: поиск стационарных точек"
+            ]
+        });
+
+        modelsData.push({
+            type: "Дифференциальные уравнения",
+            examples: [
+                {
+                    title: "Клеточная биология",
+                    equation: "$$\\frac{dC}{dt} = k C$$",
+                    interpretation: "Обозначения: \\(C\\) — количество клеток (безразмерное), \\(k\\) — коэффициент роста (1/день).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/6/6a/Bacterial_growth.png"
+                },
+                {
+                    title: "Фармакокинетика",
+                    equation: "$$\\frac{dA}{dt} = -k A$$",
+                    interpretation: "Обозначения: \\(A\\) — концентрация препарата (мг/л), \\(k\\) — коэффициент выведения (1/час).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/9/9e/Drug_metabolism.svg"
+                },
+                {
+                    title: "Эпидемиология",
+                    equation: "$$\\frac{dS}{dt} = -\\beta S I$$, $$\\frac{dI}{dt} = \\beta S I - \\gamma I$$",
+                    interpretation: "Обозначения: \\(S\\) — восприимчивые (безразмерные), \\(I\\) — инфицированные (безразмерные), \\(\\beta\\) — коэффициент заражения (1/день), \\(\\gamma\\) — коэффициент выздоровления (1/день).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/3/3d/SIR_model.svg"
+                },
+                {
+                    title: "Биохимия",
+                    equation: "$$v = \\frac{V_{max} [S]}{K_m + [S]}$$",
+                    interpretation: "Обозначения: \\(v\\) — скорость реакции, \\(V_{max}\\) — максимальная скорость, \\([S]\\) — концентрация субстрата, \\(K_m\\) — константа Михаэлиса.",
+                    source: "",
+                    image: "https://v-nayke.ru/wp-content/uploads/2025/01/rakr.jpg"
+                },
+                {
+                    title: "Ферментативная кинетика",
+                    equation: "$$\\frac{d[ES]}{dt} = k_1[E][S] - k_{-1}[ES] - k_2[ES]$$",
+                    interpretation: "Обозначения: \\([ES]\\) — концентрация комплекса фермент-субстрат, \\([E]\\) — концентрация фермента, \\([S]\\) — концентрация субстрата, \\(k_1\\), \\(k_{-1}\\), \\(k_2\\) — константы скоростей реакций.",
+                    source: "",
+                    image: "https://www.dmb.biophys.msu.ru/images/articles/6.png"
+                }
+            ],
+            methods: [
+                "Численные методы: метод Рунге-Кутта, метод конечных разностей",
+                "Аналитические методы: разделение переменных, метод Лапласа"
+            ]
+        });
+
+        modelsData.push({
+            type: "Нелинейные ОДУ с запаздыванием",
+            examples: [
+                {
+                    title: "Экология",
+                    equation: "$$\\frac{dx}{dt} = r x(t) (1 - x(t - \\tau) / K)$$",
+                    interpretation: "Обозначения: \\(x(t)\\) — численность популяции в момент времени \\(t\\), \\(\\tau\\) — временная задержка (дни), \\(K\\) — ёмкость среды.",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Population_growth.svg"
+                },
+                {
+                    title: "Эпидемиология",
+                    equation: "$$\\frac{dI}{dt} = \\beta S(t) I(t - \\tau) - \\gamma I(t)$$",
+                    interpretation: "Обозначения: \\(\\tau\\) — инкубационный период (дни).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/1/1a/SIR_Vaccination.svg"
+                }
+            ],
+            methods: [
+                "Численные методы: метод Эйлера с запаздыванием",
+                "Аналитические методы: метод характеристик"
+            ]
+        });
+
+        modelsData.push({
+            type: "Дифференциальные уравнения в частных производных",
+            examples: [
+                {
+                    title: "Нейронауки",
+                    equation: "$$\\frac{\\partial V}{\\partial t} = D \\frac{\\partial^2 V}{\\partial x^2} + I_\\text{ion}$$",
+                    interpretation: "Обозначения: \\(V\\) — мембранный потенциал (мВ), \\(D\\) — коэффициент диффузии (м²/с), \\(I_\\text{ion}\\) — ионные токи (мкА).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Neuron_spike.svg"
+                },
+                {
+                    title: "Экология",
+                    equation: "$$\\frac{\\partial u}{\\partial t} = D \\frac{\\partial^2 u}{\\partial x^2} + r u \\left(1 - \\frac{u}{K}\\right)$$",
+                    interpretation: "Обозначения: \\(u\\) — плотность популяции (особи/м²), \\(D\\) — коэффициент диффузии (м²/с).",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/3/3e/Population_growth.svg"
+                },
+                {
+                    title: "Нейронауки (Ходжкина-Хаксли)",
+                    equation: "$$C_m \\frac{dV}{dt} = I_{Na} + I_K + I_L + I_{ext}$$",
+                    interpretation: "Обозначения: \\(C_m\\) — ёмкость мембраны, \\(V\\) — мембранный потенциал, \\(I_{Na}\\), \\(I_K\\), \\(I_L\\) — ионные токи, \\(I_{ext}\\) — внешний ток.",
+                    source: "",
+                    image: "https://www.researchgate.net/profile/Chethan-M-Parameshwara/publication/357105644/figure/fig2/AS:1103160949129216@1640025474003/Depiction-of-the-dynamical-activity-of-a-spiking-neuron-The-neuron-receives-input-coming.png"
+                }
+            ],
+            methods: [
+                "Численные методы: метод конечных разностей, метод конечных элементов",
+                "Аналитические методы: метод разделения переменных"
+            ]
+        });
+
+        modelsData.push({
+            type: "Интегральные уравнения",
+            examples: [
+                {
+                    title: "Фармакокинетика",
+                    equation: "$$A(t) = \\int\\limits_0^t K(t - \\tau) C(\\tau)\\,d\\tau$$",
+                    interpretation: "Обозначения: \\(A(t)\\) — концентрация препарата в крови (мг/л), \\(K(t - \\tau)\\) — ядро взаимодействия.",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Two_compartment_model.svg"
+                }
+            ],
+            methods: [
+                "Численные методы: метод квадратур, метод Монте-Карло",
+                "Аналитические методы: преобразование Лапласа"
+            ]
+        });
+
+        modelsData.push({
+            type: "Модели на данных",
+            examples: [
+                {
+                    title: "Модель машинного обучения",
+                    equation: "$$y = f(X, \\theta)$$",
+                    interpretation: "Обозначения: \\(y\\) — предсказание, \\(X\\) — входные данные, \\(\\theta\\) — параметры модели.",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Neural_network.svg"
+                },
+                {
+                    title: "Модель регрессии",
+                    equation: "$$y = \\beta_0 + \\beta_1 x_1 + \\beta_2 x_2 + \\dots + \\beta_n x_n$$",
+                    interpretation: "Обозначения: \\(y\\) — зависимая переменная, \\(x_i\\) — независимые переменные, \\(\\beta_i\\) — коэффициенты.",
+                    source: "",
+                    image: "https://upload.wikimedia.org/wikipedia/commons/3/3a/Linear_regression.svg"
+                }
+            ],
+            methods: [
+                "Методы машинного обучения: градиентный спуск, метод опорных векторов",
+                "Методы регрессии: метод наименьших квадратов"
+            ]
+        });
+		
+		// Добавление новой модели
+		modelsData.push({
+			type: "Дифференциальные уравнения",
+			examples: [
+				{
+					title: "Эпидемиология",
+					equation: "$$\\frac{dS}{dt} = -\\beta S I$$, $$\\frac{dI}{dt} = \\beta S I - \\gamma I$$",
+					interpretation: "<strong>Обозначения.</strong> \\(S\\) — восприимчивые (безразмерные), \\(I\\) — инфицированные (безразмерные), \\(\\beta\\) — коэффициент заражения (1/день), \\(\\gamma\\) — коэффициент выздоровления (1/день).",
+					source: "",
+					image: "https://upload.wikimedia.org/wikipedia/commons/3/3d/SIR_model.svg"
+				}
+			],
+			methods: [
+				"Численные методы: метод Рунге-Кутта, метод конечных разностей",
+				"Аналитические методы: разделение переменных, метод Лапласа"
+			]
+		});
+
+        // Функция для заполнения таблицы
+        function populateTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = ''; // Очистка таблицы перед добавлением новых данных
+
+            modelsData.forEach(model => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="narrow-column"><strong>${model.type}</strong></td>
+                    <td class="wide-column">
+                        <div class="button-container">
+                            ${model.examples.map(example => `
+                                <button class="toggle-button" onclick="toggleSection('${example.title.replace(/\s+/g, '-').toLowerCase()}', this)">${example.title}</button>
+                                <div id="${example.title.replace(/\s+/g, '-').toLowerCase()}" class="collapsed">
+                                    <div class="section">
+                                        <h3>${example.title}</h3>
+                                        <p class="equation">${example.equation}</p>
+                                        <p class="interpretation">${example.interpretation}</p>
+                                        <p class="source">${example.source}</p>
+                                        <img src="${example.image}" alt="${example.title}" class="image">
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </td>
+                    <td class="narrow-column">
+                        <ul>
+                            ${model.methods.map(method => `<li>${method}</li>`).join('')}
+                        </ul>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Рендеринг формул KaTeX после добавления их в DOM
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\[", right: "\\]", display: true },
+                    { left: "$", right: "$", display: false },
+                    { left: "\\(", right: "\\)", display: false }
+                ]
+            });
+        }
+
+        // Функция для управления раскрытием/сворачиванием секций
+        function toggleSection(sectionId, button) {
+            const section = document.getElementById(sectionId);
+            if (section.classList.contains('collapsed')) {
+                section.classList.remove('collapsed');
+                button.classList.add('active');
+            } else {
+                section.classList.add('collapsed');
+                button.classList.remove('active');
+            }
+
+            // Рендеринг формул KaTeX после раскрытия секции
+            renderMathInElement(section, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "\\[", right: "\\]", display: true },
+                    { left: "$", right: "$", display: false },
+                    { left: "\\(", right: "\\)", display: false }
+                ]
+            });
+        }
+
+        // Заполнение таблицы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTable();
+        });
+    </script>
+</body>
+
+</html>
